@@ -9,9 +9,11 @@
 
 
 APP_NAME = "BearTech debugDCSBios"
-APP_VERSION = "V1.0 16/2/20"
+APP_VERSION = "V1.1 16/2/20"
 
 from tkinter import *
+import tkinter as tk 
+from tkinter import filedialog
 import numpy as np
 import sys
 import glob
@@ -23,35 +25,35 @@ from PIL import Image, ImageTk
 
 print(sys.version)
 
-class StatusBar(Frame):
+class StatusBar :
 
     def __init__(self, master):
-        #self.label = Label(self, bd=1, relief=SUNKEN, anchor=W)
-        self.label = Label(master, anchor=W)
-        self.label.pack(side=BOTTOM, fill=X)
+        #self.tk.Label = tk.Label(self, bd=1, relief=SUNKEN, anchor=W)
+        self.Label = tk.Label(master, anchor=W)
+        self.Label.pack(side=BOTTOM, fill=X)
 
 
     def set(self, format, *args):
-        self.label.config(text=format % args)
-        self.label.update_idletasks()
+        self.Label.config(text=format % args)
+        self.Label.update_idletasks()
 
     def clear(self):
-        self.label.config(text="")
-        self.label.update_idletasks()
+        self.Label.config(text="")
+        self.Label.update_idletasks()
 
 class StringDisplay:
 
 	def __init__(self, frame, name, address, mask):
 
-		self.f = LabelFrame(frame, text=name)
+		self.f = tk.LabelFrame(frame, text=name)
 		self.f.grid( row = int( mWindow.widgetCount/2), column = int(mWindow.widgetCount % 2) )
 
 		self.myText = StringVar()
 		self.currentText = ""
-		self.e = Entry(self.f , width=20, textvariable=self.myText)
+		self.e = tk.Entry(self.f , width=20, textvariable=self.myText)
 		self.e.pack(side=LEFT) 
 
-		self.b = Button(self.f, text='>', command=self.buttonPress, width=1)
+		self.b = tk.Button(self.f, text='>', command=self.ButtonPress, width=1)
 		self.b.pack(side=LEFT) 
 
 		self.address = address
@@ -63,7 +65,7 @@ class StringDisplay:
 		print("Destroying")
 		self.f.destroy()
 
-	def buttonPress(self) :
+	def ButtonPress(self) :
 		print("String Element ")
 		v = self.myText.get() + "                  "
 		self.currentText = v.encode()
@@ -96,8 +98,8 @@ class LEDButton:
 
 	def __init__(self, frame, name, address, mask):
 
-		self.buttonB = Button(frame, text=name, command=self.buttonPress, highlightbackground="white", width=20)
-		self.buttonB.grid( row = int( mWindow.widgetCount/2), column = int(mWindow.widgetCount % 2) )
+		self.ButtonB = tk.Button(frame, text=name, command=self.ButtonPress, highlightbackground="white", width=20)
+		self.ButtonB.grid( row = int( mWindow.widgetCount/2), column = int(mWindow.widgetCount % 2) )
 
 		self.address = address
 		self.mask = mask
@@ -107,17 +109,17 @@ class LEDButton:
 
 	def __del__(self):
 		print("Destroying")
-		self.buttonB.destroy()
+		self.ButtonB.destroy()
 
-	def buttonPress(self) :
+	def ButtonPress(self) :
 		print("LED Button")
 		if self.state :
 			self.state = 0
-			self.buttonB.configure(highlightbackground="white")
+			self.ButtonB.configure(highlightbackground="white")
 			self.changed = 1
 		else :
 			self.state = 1
-			self.buttonB.configure(highlightbackground="green")
+			self.ButtonB.configure(highlightbackground="green")
 			self.changed = 1
 
 	def getPacket(self) :
@@ -132,7 +134,7 @@ class LEDButton:
 		return packet
 
 
-###### End LEDButton
+###### End LEDtk.Button
 
 class IntSlider:
 
@@ -143,26 +145,26 @@ class IntSlider:
 		self.value = DoubleVar()
 		self.changed = 0
 
-		self.f = LabelFrame(frame, text=name, width=30)
+		self.f = tk.LabelFrame(frame, text=name, width=30)
 		self.f.grid( row = int( mWindow.widgetCount/2), column = int(mWindow.widgetCount % 2) )
 
 		self.autoUpdate = IntVar()
-		self.cb = Checkbutton(self.f, variable=self.autoUpdate, text="Auto")
+		self.cb = tk.Checkbutton(self.f, variable=self.autoUpdate, text="Auto")
 		self.cb.grid(row=1, column=0)
 
 		self.autoRate = StringVar()
 
-		self.l = Entry(self.f, textvariable=self.autoRate, width=3)
+		self.l = tk.Entry(self.f, textvariable=self.autoRate, width=3)
 		self.l.grid(row=1, column=1)
 
-		self.ll = Label(self.f, text="/s")
+		self.ll = tk.Label(self.f, text="/s")
 		self.ll.grid(row=1, column=3)
 
 		self.autoWrap = IntVar()
-		self.cb = Checkbutton(self.f, variable=self.autoWrap, text="Wrap")
+		self.cb = tk.Checkbutton(self.f, variable=self.autoWrap, text="Wrap")
 		self.cb.grid(row=1, column=4)
 
-		self.intS = Scale(self.f, command=self.sliderMove, from_ = 0, to = 65535, orient=HORIZONTAL, variable=self.value, width=10, length=200)
+		self.intS = tk.Scale(self.f, command=self.sliderMove, from_ = 0, to = 65535, orient=HORIZONTAL, variable=self.value, width=10, length=200)
 		self.intS.grid(row=0, column=0, columnspan=5, sticky=W+E)
 
 		self.autoValue = self.value
@@ -237,15 +239,15 @@ class catCreator:
 		self.name = name
 
 
-		self.buttonB = Button(listFrame, text=name, command=self.buttonPress, highlightbackground="white", width=30)
-		self.buttonB.pack(anchor=W)
+		self.ButtonB = tk.Button(listFrame, text=name, command=self.ButtonPress, highlightbackground="white", width=30)
+		self.ButtonB.pack(anchor=W)
 
-		self.ff = Frame(listFrame, width = 40, height = 4)
+		self.ff = tk.Frame(listFrame, width = 40, height = 4)
 		self.ff.pack()
 
 		self.showF = 1
 
-	def buttonPress(self):
+	def ButtonPress(self):
 		if self.showF :
 			self.showF = 0
 			self.ff.config(height = 0)
@@ -264,17 +266,17 @@ class widgetCreator:
 		self.address = address
 		self.mask = mask
 		self.imageToUse = imageToUse
-		self.ll = Label(listFrame)
+		self.ll = tk.Label(listFrame)
 		self.ll.pack()
-		self.img = Label(self.ll, image=self.imageToUse)
+		self.img = tk.Label(self.ll, image=self.imageToUse)
 		self.img.image = self.imageToUse
 		#self.img.place(x=0, y=0)
 		self.img.pack(side=LEFT)
-		self.buttonB = Button(self.ll, text=name, command=self.buttonPress, highlightbackground="white", width=36)
-		self.buttonB.pack(side=LEFT)
+		self.ButtonB = tk.Button(self.ll, text=name, command=self.ButtonPress, highlightbackground="white", width=36)
+		self.ButtonB.pack(side=LEFT)
 
 
-	def buttonPress(self):
+	def ButtonPress(self):
 		if self.type == 'led':
 			mWindow.dcsBiosButtons.append( LEDButton(self.widgetFrame, self.name, np.uint16(self.address), np.uint16(self.mask)))
 			mWindow.dcsBiosAddressOrder[self.address] = mWindow.widgetCount
@@ -306,17 +308,17 @@ class DCSDebugWindow:
 
 
 	#Create Main Window title="Bear DCSBios Debug Tool"
-	def __init__(self, master, serPorts ):
+	def __init__(self, master ):
 
-		self.serPorts = serPorts
+
 		master.geometry("1088x712")
 		master.title(APP_NAME + " " + APP_VERSION)
 		#controls
-		self.topF = Frame(master, relief="raised")
-		self.topF.pack(side=TOP, anchor = W, fill=X)
+		self.topF = tk.Frame(master, relief="raised")
+		self.topF.pack( anchor = W, fill=X)
 
-		self.mainF = Frame(master)
-		self.mainF.pack(side = TOP, anchor = W)
+		self.mainF = tk.Frame(master)
+		self.mainF.pack( anchor = W)
 		
 		self.statusBar = StatusBar(master)
 		self.statusBar.set("%s", "Ready")
@@ -327,20 +329,24 @@ class DCSDebugWindow:
 
 
 		#Recv Data 
-		self.rightF = LabelFrame(self.mainF, height = 30, text="Recv Text", width=50)
-		self.rightF.grid(row=0, column=0, rowspan=2)
+		self.rightF = tk.LabelFrame(self.mainF, height = 30, text="Recv Text", width=50)
+		self.rightF.grid(row=0, column=0, rowspan=20)
 
 		#Recv Data
 		
 		self.recvTextVariable = StringVar()
-		self.recvText = Label(self.rightF, textvariable = self.recvTextVariable, height=40, width = 30,  anchor=NW, justify=LEFT)
+		self.recvText = tk.Label(self.rightF, textvariable = self.recvTextVariable, height=40, width = 30,  anchor=NW, justify=LEFT)
 		self.recvText.pack(anchor=N)
 		#self.recvText.insert(END,"Hello")
 
 
 		#Scrollable Frame
-		loc = LabelFrame(self.mainF, width = 50, text="Categories")
-		loc.grid(row=0, column=1, sticky="nsew", rowspan=2)
+		fileF = tk.LabelFrame(self.mainF, width = 50, height=1, text="DCSBios File")
+		fileF.grid(row=0, column=1, sticky="nsew")
+
+		loc = tk.LabelFrame(self.mainF, width = 50, height=50,text="Categories")
+
+		loc.grid(row=1, column=1, sticky="nsew", rowspan=19)
 
 		canvas = Canvas(loc, width=360)
 		scrollbar = Scrollbar(loc, orient="vertical", command=canvas.yview)
@@ -361,6 +367,15 @@ class DCSDebugWindow:
 		canvas.pack(side="left", fill="both", expand=True)
 		scrollbar.pack(side="right", fill="y")
 		
+		self.fileNameVariable = StringVar()
+		self.fileNameVariable.set("Choose DCSBios json File")
+		self.fileName = tk.Label(fileF, textvariable = self.fileNameVariable, width=40, justify=LEFT)
+		self.fileName.pack(side="left")
+
+		self.chooseJSONFileB = tk.Button(fileF, text=">")
+		self.chooseJSONFileB.bind("<Button-1>", self.chooseJSONFile)
+		self.chooseJSONFileB.pack(side=RIGHT)
+
 		#Scrollable Frame End
 
 		#master.grid_columnconfigure(0,weight=1)
@@ -368,38 +383,59 @@ class DCSDebugWindow:
 		#master.grid_rowconfigure(0,weight=1)
 		#master.grid_rowconfigure(1,weight=1)
 
-		#Action Buttons
-		self.btmF = LabelFrame(self.mainF, text="Active Controls", width = 50)
-		self.btmF.grid(row=0, column=2, sticky=NW)
+		#Action tk.Buttons
+		self.btmF = tk.LabelFrame(self.mainF, text="Active Controls", width = 50)
+		self.btmF.grid(row=0, column=2, rowspan=20, sticky=NW)
 
 		#Controls
+
+
+		self.findSerPortsB = tk.Button(self.topF, text="Find Serial Ports")
+		self.findSerPortsB.bind("<Button-1>", self.findSerPorts)
+		self.findSerPortsB.pack(side=LEFT)
+
+		self.serialPortList =  serial_ports() 
+		if len(self.serialPortList) == 0 :
+			self.serialPortList = ["-"]
+		#self.serialPortList = ["aa", "bb", "cc"]
+		print(self.serialPortList)
+
+		self.serialPortChoice = StringVar()
+		self.serialPortChoice.set("-")
+		self.listB = OptionMenu(self.topF, self.serialPortChoice, *self.serialPortList)
+		self.listB.pack(side=LEFT)
+
+		
+
+		
+
 		self.connectButtonText = StringVar()
 		self.connectButtonText.set("Connect")
-		self.connectB = Button(self.topF, textvariable=self.connectButtonText)
+		self.connectB = tk.Button(self.topF, textvariable=self.connectButtonText)
 		self.connectB.bind("<Button-1>", self.toggleConnection)
 		self.connectB.pack(side=LEFT)
 		
 		self.intervalF = Frame(self.topF)
 		self.intervalF.pack(side=LEFT)
 
-		self.intervalL = Label(self.intervalF, text="Updates")
+		self.intervalL = tk.Label(self.intervalF, text="Updates")
 		self.intervalL.grid(row=0, column=0)
 
-		self.intervalE = Entry(self.intervalF, width=2, text="30")
+		self.intervalE = tk.Entry(self.intervalF, width=2, text="30")
 		self.intervalE.grid(row=0, column=1)
 
-		self.intervalL = Label(self.intervalF, text="/s")
+		self.intervalL = tk.Label(self.intervalF, text="/s")
 		self.intervalL.grid(row=0, column=2)
 
 		self.saveRecvData = 1
-		self.saveRecvDataC = Checkbutton(self.topF,text="Save Recv Data", variable=self.saveRecvData)
+		self.saveRecvDataC = tk.Checkbutton(self.topF,text="Save Recv Data", variable=self.saveRecvData)
 		self.saveRecvDataC.pack(side=LEFT)
 
-		self.clearB = Button(self.topF, text="Clear", width=8)
+		self.clearB = tk.Button(self.topF, text="Clear", width=8)
 		self.clearB.bind("<Button-1>", self.clear)
 		self.clearB.pack(side=LEFT)
 
-		self.quitAppB = Button(self.topF, text="Quit", width=8)
+		self.quitAppB = tk.Button(self.topF, text="Quit", width=8)
 		self.quitAppB.bind("<Button-1>", self.quitApp)
 		self.quitAppB.pack(side=RIGHT, anchor=E)
 
@@ -409,16 +445,37 @@ class DCSDebugWindow:
 		#Read Config File
 		
 
-		#self.dcsBiosButtons.append( LEDButton(self.btmF, "Waypoints", np.uint16(0x1920), np.uint16(0x0400)))
+		#self.dcsBiostk.Buttons.append( LEDtk.Button(self.btmF, "Waypoints", np.uint16(0x1920), np.uint16(0x0400)))
 		#self.dcsBiosAddressOrder[0x1920] = 0
 
-		#self.dcsBiosButtons.append( LEDButton(self.btmF, "Wind Hdg/Spd", np.uint16(0x1932), np.uint16(0x0400)))
+		#self.dcsBiostk.Buttons.append( LEDtk.Button(self.btmF, "Wind Hdg/Spd", np.uint16(0x1932), np.uint16(0x0400)))
 		#self.dcsBiosAddressOrder[0x1932] = 1
 
-	#	self.dcsBiosButtons.append( IntSlider(self.btmF, "Mag var 1", np.uint16(0x1942)))
+	#	self.dcsBiostk.Buttons.append( IntSlider(self.btmF, "Mag var 1", np.uint16(0x1942)))
 		#self.dcsBiosAddressOrder[0x1942] = 2
 
-	def readJSONData(self) :
+	def chooseJSONFile(self, event) :
+		print("Open File")
+		openFile =  filedialog.askopenfilename(title = "Select file",filetypes = (("json files","*.json"),("all files","*.*")))
+		print(openFile)
+		if openFile != "" :
+			self.readJSONData( openFile)
+			self.fileNameVariable.set(openFile)
+
+	def findSerPorts(self,event) :
+		print("Poll Serial")
+		self.serialPortList =  serial_ports() 
+
+		print(self.serialPortList)
+		if len(self.serialPortList) == 0 :
+			self.serialPortList = ["-"]
+		self.serialPortChoice.set("-")
+		self.listB['menu'].delete(0, 'end') 
+		
+		for choice in self.serialPortList :
+			self.listB['menu'].add_command(label=choice, command=tk._setit(self.serialPortChoice, choice))
+
+	def readJSONData(self, fileName) :
 		load = Image.open("led.png")
 		self.ledI = ImageTk.PhotoImage(load)
 
@@ -430,7 +487,7 @@ class DCSDebugWindow:
 
 		#Read json file
 
-		with open('Ka-50.json', 'r') as f :
+		with open(fileName, 'r') as f :
 			data = json.load(f)
 
 			for cat in sorted(data) :
@@ -477,10 +534,10 @@ class DCSDebugWindow:
 			self.ser.close() 
 		else :
 			
-			print("Open Connection")
+			print("Open Connection" + self.serialPortChoice.get() )
 			
-			for port in self.serPorts:
-				self.ser = serial.Serial(port, 250000, timeout=0, rtscts=0)  # open serial port
+			if self.serialPortChoice.get() != "-" :
+				self.ser = serial.Serial(self.serialPortChoice.get(), 250000, timeout=0, rtscts=0)  # open serial port
 				print(">" + str(self.ser) + "<")
 				if self.ser == "" :
 					print("No Serial Port")
@@ -488,7 +545,7 @@ class DCSDebugWindow:
 					self.connectionIsOpen = 1
 					self.nextUpdate = time.monotonic() + 0.2
 					self.connectButtonText.set("Close")
-				break
+
 			
 
 	
@@ -689,7 +746,7 @@ def update() :
 
 			q = mWindow.recvTextVariable.get() 
 			s = ""
-			for sTemp in q.splitlines()[-37:60] :
+			for sTemp in q.splitlines()[-39:60] :
 				s = s + sTemp + "\n"
 
 			packet = mWindow.ser.read(30)
@@ -708,13 +765,13 @@ def update() :
 
 
 #if __name__ == '__main__':
-serPorts =  serial_ports() 
-print(serPorts)
+#serPorts =  serial_ports() 
+#print(serPorts)
 #replayFile(serPorts)
 
-root = Tk()
-mWindow = DCSDebugWindow(root, serPorts) 
-mWindow.readJSONData()
+root = tk.Tk()
+mWindow = DCSDebugWindow(root) 
+#mWindow.readJSONData()
 
 update()
 
