@@ -1,4 +1,4 @@
-# debugDCSBios
+# dcsBiosDebug
 App to help debug DCSBios instruments
 
 
