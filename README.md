@@ -10,6 +10,15 @@ This is still a work in progress. Bugs are expected
 
 # Downloads
 
+**Pre Built Binaries**
+[Windows 64bit]
+
+Should be fully self contained
+
+**Mac OSX App Bundle**
+[Mac OSX App]
+**Note** This is not fully self contained. Python3 as well as some dependancies (eg tkinter, pyserial & numpy) will need to be installed separately
+
 # Usage
 
 ## Select and Connect Serial Port
