@@ -18,7 +18,7 @@ Should be fully self contained
 
 **Mac OSX App Bundle**
 
-[Mac OSX App](zip/dcsBiosDebud.zip)
+[Mac OSX App](zip/dcsBiosDebug.zip)
 
 **Note** This is not fully self contained. Python3 as well as some dependancies (eg tkinter, pyserial & numpy) will need to be installed separately
 
