@@ -90,12 +90,16 @@ In the above example, the Int will start from 0, increement to 2, then 4 ect, 12
 # Limitations
 Field entry value checking as noted above
 Int Field not fully verified
+Save Received Data not implemented
 
 
 # Further Work
 Remove above limitations :-)
+
 Save Active Indicator to a file
+
 Remove individual indicators
+
 
 **Suggestions for improvement and bug reports are welcome**
 
