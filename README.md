@@ -62,10 +62,12 @@ Again, click to make active. Drag slider to send update value to instrument.
 Int Fields can also send updates automatically. Click the 'Auto' button
 ![Choose Serial Port](manual/ScreenshotInt1.png)
 
-Int Field will then increment at set rate slider value, '/s' times per second,  until 65536 reached, then start decrementing until zero. Then repeat. 
+Int Field will then increment at set rate slider value, '/s' times per second,  until 65535 reached, then start decrementing until zero. Then repeat
+If 'Wrap' is set, in Auto mode will wrap from 65535 to zero and continue incrementing until reaching 65535 the second time. Then will start decrementing, again wrapping from 0 to 65535. At end of second cycle will repeat.
+
 ![Choose Serial Port](manual/ScreenshotInt2.png)
 
-If 'Wrap' is set, in Auto mode will wrap from 65536 to zero and continue incrementing until reaching 65536 the second time. Then will start decrementing, again wrapping from 0 to 65536. At end of second cycle will repeat.
+In the above example, the Int will start from 0, increement to 2, then 4 ect, 12 times per second. On reaching 65535, it'll reset to 0, and then continue to 65535 a second time. it'll then start decrementing, rest to 65535 when it reaches 0, and continue until it reaches 0 again. It'll then start increemnenting again.
 
 Note. Int Field hasn't been fully verified. Regard this part of App as alpha quality.
 
