@@ -11,12 +11,15 @@ This is still a work in progress. Bugs are expected
 # Downloads
 
 **Pre Built Binaries**
+
 [Windows 64bit]
 
 Should be fully self contained
 
 **Mac OSX App Bundle**
+
 [Mac OSX App]
+
 **Note** This is not fully self contained. Python3 as well as some dependancies (eg tkinter, pyserial & numpy) will need to be installed separately
 
 # Usage
@@ -43,10 +46,10 @@ By default, dcsBiosDebug will send one update per second. This can be increased 
 ## Choose JSON File
 Next, need to choose DCS Bios JSON file that defines instruments, buttons etc 
 
-Click '>', browse to JSON fil for your aircraft in DCS Bios folder and click 'Open'
+Click '>', browse to JSON file for your aircraft in DCS Bios folder and click 'Open'
 ![Choose JSON](manual/ScreenshotJSON.png)
 
-Categories area should get populated with all the various gugyes, LEDs etc defined for your aircraft
+Categories area should get populated with all the various gauges, LEDs etc defined for your aircraft
 ![JSON Loaded](manual/ScreenshotJSONLoaded.png)
 
 ## Make the required controls active
