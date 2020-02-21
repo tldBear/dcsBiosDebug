@@ -27,7 +27,7 @@ Serial Port should then open. dcsBiosDebug will start sending updates to connect
 
 By default, dcsBiosDebug will send one update per second. This can be increased by setting the value in the update/s field.
 (max 30)
-Note There's currently no error checking on this field. Entering something other than an integer value will cause an error inhte app. You'll need to restart.
+**Note** There's currently no error checking on this field. Entering something other than an integer value will cause an error inhte app. You'll need to restart.
 
 ## Choose JSON File
 Next, need to choose DCS Bios JSON file that defines instruments, buttons etc 
@@ -71,7 +71,7 @@ If 'Wrap' is set, in Auto mode will wrap from 65535 to zero and continue increme
 
 In the above example, the Int will start from 0, increement to 2, then 4 ect, 12 times per second. On reaching 65535, it'll reset to 0, and then continue to 65535 a second time. it'll then start decrementing, rest to 65535 when it reaches 0, and continue until it reaches 0 again. It'll then start increemnenting again.
 
-Note. Int Field hasn't been fully verified. Regard this part of App as alpha quality.
+**Note** Int Field hasn't been fully verified. Regard this part of App as alpha quality.
 
 # Limitations
 Field entry value checking as noted above
@@ -82,4 +82,6 @@ Int Field not fully verified
 Remove above limitations :-)
 Save Active Indicator to a file
 Remove individual indicators
+
+**Suggestions for improvement and bug reports are welcome**
 
