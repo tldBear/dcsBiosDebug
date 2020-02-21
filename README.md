@@ -42,7 +42,7 @@ Categories area should get populated with all the various gugyes, LEDs etc defin
 ## Make the required controls active
 Now need to make active the controls you want debug in this session
 
-Scroll down to the particular instrument, and click on hte entry for the LED, guage or text field to debug. This will add it to the Active Indicator area. 
+Scroll down to the particular instrument, and click on the entry for the LED, guage or text field to debug. This will add it to the Active Indicator area. 
 ![Choose Serial Port](manual/ScreenshotLED.png)
 
 Eg In this screen shot, controls for the Ka50 PVI-800 are being debugged. The PVI_WAYPOINTS_LED has been added
@@ -53,7 +53,7 @@ Clicking on the LED will toggle its state
 
 
 
-**Text Fields**, click in Categories to add to Active Indicators. Enter the text to send, then click the '>' button to send
+**Text Fields**, click in Categories to add to Active Indicators. Enter the text to send, then click the '>' button to send the update
 
 ![Choose Serial Port](manual/ScreenshotText2.png)
 
@@ -70,7 +70,7 @@ If 'Wrap' is set, in Auto mode will wrap from 65535 to zero and continue increme
 
 ![Choose Serial Port](manual/ScreenshotInt2.png)
 
-In the above example, the Int will start from 0, increement to 2, then 4 ect, 12 times per second. On reaching 65535, it'll reset to 0, and then continue to 65535 a second time. it'll then start decrementing, rest to 65535 when it reaches 0, and continue until it reaches 0 again. It'll then start increemnenting again.
+In the above example, the Int will start from 0, increement to 2, then 4 ect, 12 times per second. On reaching 65535, it'll reset to 0, and then continue to 65535 a second time. it'll then start decrementing, reset to 65535 when it reaches 0, and continue until it reaches 0 again. It'll then start incrementing again.
 
 **Note** Int Field hasn't been fully verified. Regard this part of App as alpha quality.
 
