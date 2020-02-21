@@ -1,11 +1,13 @@
 # dcsBiosDebug
 App to help debug DCSBios instruments
 
+Note
+This is still a work in progress. Bugs are expected
 
 ![App Screenshot](manual/appScreenshot.png)
 
 
-Downloads
+#1 Downloads
 
 Usage
 
@@ -15,17 +17,17 @@ Click 'Find Serial Ports', then choose from drop down list
 ![Choose Serial Port](manual/ScreenshotSerial1.png)
 
 Next click 'Connect'
-![Choose Serial Port](manual/SerialConnect.png)
+![Choose Serial Port](manual/Screenshot_SerialConnect.png)
 
 Serial Port should then open. dcsBiosDebug will start sending updates to connected Arduinos, and print any responses to the RecvText window
 
 ![Choose Serial Port](manual/Screenshot_SerialOpen.png)
 
-By default, dcsBiosDebug will send one update per second. This can be increased by setting hte value in hte update/s field.
+By default, dcsBiosDebug will send one update per second. This can be increased by setting the value in the update/s field.
 (max 30)
 Note There's currently no error checking on this field. Entering something other than an integer value will cause an error inhte app. You'll need to restart.
 
-Choose JSON File
+#1Choose JSON File
 Next, need to choose DCS Bios JSON file that defines instruments, buttons etc 
 
 Click '>', browse to JSON fil for your aircraft in DCS Bios folder and click 'Open'
