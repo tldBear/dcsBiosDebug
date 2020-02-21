@@ -13,10 +13,10 @@ This is still a work in progress. Bugs are expected
 
 ## Select and Connect Serial Port
 Click 'Find Serial Ports', then choose from drop down list
+
 ![Find Serial Ports](manual/Screenshot_Serial0.png)
 
 ![Choose Serial Port](manual/ScreenshotSerial1.png)
-
 
 Next click 'Connect'
 
