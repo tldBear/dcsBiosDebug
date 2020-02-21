@@ -16,7 +16,9 @@ Click 'Find Serial Ports', then choose from drop down list
 ![Find Serial Ports](manual/Screenshot_Serial0.png)
 ![Choose Serial Port](manual/ScreenshotSerial1.png)
 
+
 Next click 'Connect'
+
 ![Choose Serial Port](manual/Screenshot_SerialConnect.png)
 
 Serial Port should then open. dcsBiosDebug will start sending updates to connected Arduinos, and print any responses to the RecvText window
