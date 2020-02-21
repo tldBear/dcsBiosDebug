@@ -1,4 +1,6 @@
-![App Icon](iconDebug.png) # dcsBiosDebug 
+ # dcsBiosDebug 
+ ![App Icon](iconDebug.png)
+ 
 App to help debug DCSBios instruments
 
 Note
