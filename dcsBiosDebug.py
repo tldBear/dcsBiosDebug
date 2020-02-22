@@ -5,11 +5,11 @@
 #
 #
 #	(c)2020 DRoberts
-#	Version 1.0	
 
 
-APP_NAME = "BearTech debugDCSBios"
-APP_VERSION = "V1.1 16/2/20"
+APP_VERSION = "V1.11 21/2/20"
+APP_NAME = "BearTech dcsBiosDebug"
+
 
 from tkinter import *
 import tkinter as tk 
@@ -313,6 +313,9 @@ class DCSDebugWindow:
 
 		master.geometry("1088x712")
 		master.title(APP_NAME + " " + APP_VERSION)
+
+
+
 		#controls
 		self.topF = tk.Frame(master, relief="raised")
 		self.topF.pack( anchor = W, fill=X)
@@ -384,7 +387,7 @@ class DCSDebugWindow:
 		#master.grid_rowconfigure(1,weight=1)
 
 		#Action tk.Buttons
-		self.btmF = tk.LabelFrame(self.mainF, text="Active Controls", width = 50)
+		self.btmF = tk.LabelFrame(self.mainF, text="Active Instruments", width = 50)
 		self.btmF.grid(row=0, column=2, rowspan=20, sticky=NW)
 
 		#Controls
@@ -776,7 +779,6 @@ mWindow = DCSDebugWindow(root)
 update()
 
 root.mainloop()
-
 
 print("Exiting")
 #save config
