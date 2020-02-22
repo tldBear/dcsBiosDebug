@@ -2,8 +2,9 @@
 
 block_cipher = None
 added_files = [
-         ( 'icons/*png', '.' ),
-
+         ( 'icons/led.png', '.' ),
+         ( 'icons/gauge.png', '.' ),
+         ( 'icons/text.png', '.' )
          ]
 
 a = Analysis(['dcsBiosDebug.py'],
@@ -27,10 +28,11 @@ exe = EXE(pyz,
           a.datas,
           [],
           name='dcsBiosDebug',
-          debug=False,
+          debug=True,
           bootloader_ignore_signals=False,
           strip=False,
           upx=True,
           upx_exclude=[],
           runtime_tmpdir=None,
-          console=True )
+          console=True,
+          icon='iconDebug.ico' )

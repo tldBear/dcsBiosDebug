@@ -7,7 +7,7 @@
 #	(c)2020 DRoberts
 
 
-APP_VERSION = "V1.11 21/2/20"
+APP_VERSION = "V1.12 22/2/20"
 APP_NAME = "BearTech dcsBiosDebug"
 
 
@@ -116,10 +116,12 @@ class LEDButton:
 		if self.state :
 			self.state = 0
 			self.ButtonB.configure(highlightbackground="white")
+			self.ButtonB.configure(background="white")
 			self.changed = 1
 		else :
 			self.state = 1
 			self.ButtonB.configure(highlightbackground="green")
+			self.ButtonB.configure(background="green")
 			self.changed = 1
 
 	def getPacket(self) :
@@ -187,7 +189,7 @@ class IntSlider:
 		if self.autoUpdate.get() :
 			if time.monotonic() > self.nextUpdate :
 				self.autoValue = self.autoValue + self.value*self.dir
-				print(self.autoValue)
+				
 				#check for wrapping condition
 				if self.autoWrap.get() :
 					if self.autoValue > 65535 :
@@ -210,6 +212,7 @@ class IntSlider:
 						self.autoValue =  0
 						self.dir = self.dir * -1
 
+				print(self.autoValue)
 				#get update interval
 				tt = self.autoRate.get()
 				if tt == "" :
@@ -479,13 +482,16 @@ class DCSDebugWindow:
 			self.listB['menu'].add_command(label=choice, command=tk._setit(self.serialPortChoice, choice))
 
 	def readJSONData(self, fileName) :
-		load = Image.open("led.png")
+		file_path = resource_path("led.png")
+		load = Image.open(file_path)
 		self.ledI = ImageTk.PhotoImage(load)
 
-		load1 = Image.open("text.png")
+		file_path = resource_path("text.png")
+		load1 = Image.open(file_path)
 		self.textI = ImageTk.PhotoImage(load1)
 
-		load2 = Image.open("gauge.png")
+		file_path = resource_path("gauge.png")
+		load2 = Image.open(file_path)
 		self.gaugeI = ImageTk.PhotoImage(load2)
 
 		#Read json file
@@ -713,6 +719,19 @@ def serial_ports():
 	return result
 
 ####################################################
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
+
+
+
 
 def update() :
 	
