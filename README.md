@@ -93,9 +93,13 @@ In the above example, the Integer will start from 0, increement to 2, then 4 ect
 
 # Limitations and known bugs
 Field entry value checking as noted above
+
 Integer Field not fully verified
+
 Save Received Data not implemented
+
 Integer Fields only 16bit
+
 Quit button doesn't work on Windows. Hit x or kill app
 
 
