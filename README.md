@@ -18,7 +18,7 @@ This app is designed to just that. It's a small GUI that allows you to send inst
 
 [Windows 64bit](zip/dcsBiosDebug.exe)
 
-Should be fully self contained
+Should be fully self contained 
 
 **Mac OSX App Bundle**
 
@@ -74,7 +74,7 @@ Clicking on the LED will toggle its state
 
 ![Text](manual/ScreenshotText2.png)
 
-**Int Fields**
+**Integer Fields**
 Again, click to make active. Drag slider to send update value to instrument.
 
 ![Int](manual/ScreenshotInt.png)
@@ -82,19 +82,21 @@ Again, click to make active. Drag slider to send update value to instrument.
 Int Fields can also send updates automatically. Click the 'Auto' button
 ![IntAuto](manual/ScreenshotInt1.png)
 
-Int Field will then increment at set rate slider value, '/s' times per second,  until 65535 reached, then start decrementing until zero. Then repeat
+Integer Field will then increment at set rate slider value, '/s' times per second,  until 65535 reached, then start decrementing until zero. Then repeat
 If 'Wrap' is set, in Auto mode will wrap from 65535 to zero and continue incrementing until reaching 65535 the second time. Then will start decrementing, again wrapping from 0 to 65535. At end of second cycle will repeat.
 
 ![IntAutoWrap](manual/ScreenshotInt2.png)
 
-In the above example, the Int will start from 0, increement to 2, then 4 ect, 12 times per second. On reaching 65535, it'll reset to 0, and then continue to 65535 a second time. it'll then start decrementing, reset to 65535 when it reaches 0, and continue until it reaches 0 again. It'll then start incrementing again.
+In the above example, the Integer will start from 0, increement to 2, then 4 ect, 12 times per second. On reaching 65535, it'll reset to 0, and then continue to 65535 a second time. it'll then start decrementing, reset to 65535 when it reaches 0, and continue until it reaches 0 again. It'll then start incrementing again.
 
-**Note** Int Field hasn't been fully verified. Regard this part of App as alpha quality.
+**Note** Integer Field hasn't been fully verified. Regard this part of App as alpha quality.
 
-# Limitations
+# Limitations and known bugs
 Field entry value checking as noted above
-Int Field not fully verified
+Integer Field not fully verified
 Save Received Data not implemented
+Integer Fields only 16bit
+Quit button doesn't work on Windows. Hit x or kill app
 
 
 # Further Work
@@ -102,7 +104,7 @@ Remove above limitations :-)
 
 Save Active Indicator to a file
 
-Remove individual indicators
+Add ability to remove individual indicators
 
 
 **Suggestions for improvement and bug reports are welcome**
