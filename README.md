@@ -16,13 +16,13 @@ This app is designed to just that. It's a small GUI that allows you to send inst
 
 **Pre Built Binaries**
 
-[Windows 64bit](zip/dcsBiosDebug.exe)
+[Windows 64bit](downloads/dcsBiosDebug.exe)
 
 Should be fully self contained 
 
 **Mac OSX App Bundle**
 
-[Mac OSX App](zip/dcsBiosDebug.zip)
+[Mac OSX App](downloads/dcsBiosDebug.zip)
 
 **Note** This is not fully self contained. Python3 as well as some dependancies (eg tkinter, pyserial & numpy) will need to be installed separately
 
