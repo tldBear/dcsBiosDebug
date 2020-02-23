@@ -29,8 +29,8 @@ Should be fully self contained.
  
  
 
-**Git Hub Project**
-[GitHub Project](https://github.com/tldBear/dcsBiosDebug)
+
+[**GitHub Project**](https://github.com/tldBear/dcsBiosDebug)
  
  
 Alternatively, clone the GitHub project and run the python script directly. Again, you'll need to fulfil the dependancies.
