@@ -45,10 +45,10 @@ Serial Port should then open. dcsBiosDebug will start sending updates to connect
 
 By default, dcsBiosDebug will send one update per second. This can be increased by setting the value in the update/s field.
 (max 30)
-**Note** There's currently no error checking on this field. Entering something other than an integer value will cause an error inhte app. You'll need to restart.
+**Note** There's currently no error checking on this field. Entering something other than an integer value will cause an error in the app. You'll need to restart.
 
 ## Choose JSON File
-Next, need to choose DCS Bios JSON file that defines instruments, buttons etc 
+Next, need to choose DCS Bios JSON file that defines instruments, buttons etc. These should be in the doc/json directory of DCS Bios. 
 
 Click '>', browse to JSON file for your aircraft in DCS Bios folder and click 'Open'
 ![Choose JSON](manual/ScreenshotJSON.png)
