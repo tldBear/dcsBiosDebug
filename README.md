@@ -14,26 +14,23 @@ This app is designed to just that. It's a small GUI that allows you to send inst
 
 # Downloads
 
-**Pre Built Binaries**
+### Pre Built Binaries
 
 [Windows 64bit](downloads/dcsBiosDebug.exe)
 
 Should be fully self contained. 
  
- 
-**Mac OSX App Bundle**
+### Python script
 
-[Mac OSX App](downloads/dcsBiosDebug.zip)
+[**Mac OSX App Bundle**](downloads/dcsBiosDebug.zip)
 
-**Note** This is not fully self contained. Python3 as well as some dependancies (eg tkinter, pyserial & numpy) will need to be installed separately.
- 
- 
+
 
 
 [**GitHub Project**](https://github.com/tldBear/dcsBiosDebug)
- 
- 
-Alternatively, clone the GitHub project and run the python script directly. Again, you'll need to fulfil the dependancies.
+
+**Note** These are not fully self contained. Python3 as well as some dependancies (eg tkinter, pyserial & numpy) will need to be installed separately.
+
 
 # Usage
 
