@@ -9,7 +9,7 @@ This is still a work in progress. Bugs are expected.
 
 # Concept
 
-Often when building/debugging dcsBios based instruments, it can be useful to be able to send to the instrument a particular uopdate message, gauage value etc without having start DCS, start a mssion, try to fly whilest debugging etc
+Often when building/debugging dcsBios based instruments, it can be useful to be able to send to the instrument a particular update message, gauge value etc without having start DCS, start a mission, try to fly whilst debugging etc
 This app is designed to just that. It's a small GUI that allows you to send instrument state updates over a serial port to your cockpit hardware and view their responses.
 
 # Downloads
