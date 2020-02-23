@@ -42,7 +42,7 @@ Next click 'Connect'
 
 ![Choose Serial Port](manual/Screenshot_SerialConnect.png)
 
-Serial Port should then open. dcsBiosDebug will start sending updates to connected Arduinos, and print any responses to the RecvText window
+Serial Port should then open. dcsBiosDebug will start sending updates to connected Arduinos, and print any responses to the Recv Text window
 
 ![Choose Serial Port](manual/Screenshot_SerialOpen.png)
 
