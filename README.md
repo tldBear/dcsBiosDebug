@@ -29,7 +29,7 @@ Should be fully self contained.
 
 [**GitHub Project**](https://github.com/tldBear/dcsBiosDebug)
 
-**Note** These are not fully self contained. Python3 as well as some dependancies (eg tkinter, pyserial & numpy) will need to be installed separately.
+**Note** These are not fully self contained. Python3, as well as some dependancies (eg tkinter, pyserial & numpy) will need to be installed separately.
 
 
 # Usage
