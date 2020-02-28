@@ -7,7 +7,7 @@
 #	(c)2020 DRoberts
 
 
-APP_VERSION = "V1.12 22/2/20"
+APP_VERSION = "V1.20 28/2/20"
 APP_NAME = "BearTech dcsBiosDebug"
 
 
@@ -16,6 +16,7 @@ import tkinter as tk
 from tkinter import filedialog
 import numpy as np
 import sys
+import os
 import glob
 import time
 #find serial ports
@@ -144,7 +145,7 @@ class IntSlider:
 
 		
 		self.address = address
-		self.value = DoubleVar()
+		self.value = IntVar()
 		self.changed = 0
 
 		self.f = tk.LabelFrame(frame, text=name, width=30)
@@ -169,7 +170,7 @@ class IntSlider:
 		self.intS = tk.Scale(self.f, command=self.sliderMove, from_ = 0, to = 65535, orient=HORIZONTAL, variable=self.value, width=10, length=200)
 		self.intS.grid(row=0, column=0, columnspan=5, sticky=W+E)
 
-		self.autoValue = self.value
+		self.autoValue = np.uint16(0)
 		self.nextUpdate = time.monotonic()
 		self.dir = 1
 		self.autoCount = 2
@@ -188,7 +189,8 @@ class IntSlider:
 		packet = ""
 		if self.autoUpdate.get() :
 			if time.monotonic() > self.nextUpdate :
-				self.autoValue = self.autoValue + self.value*self.dir
+				a = np.uint16(self.value)*np.uint16(self.dir)
+				self.autoValue = self.autoValue + a
 				
 				#check for wrapping condition
 				if self.autoWrap.get() :
@@ -225,7 +227,7 @@ class IntSlider:
 
 				self.nextUpdate = time.monotonic() + interval
 				packet =  b"" + np.uint8(self.address%256) + np.uint8(self.address/256) + b"\x02\x00" + np.uint8(self.autoValue % 256) + np.uint8(self.autoValue / 256)
-				print(packet)
+				#print(packet)
 		else :
 			self.autoValue = self.value
 			if self.changed :
@@ -482,15 +484,15 @@ class DCSDebugWindow:
 			self.listB['menu'].add_command(label=choice, command=tk._setit(self.serialPortChoice, choice))
 
 	def readJSONData(self, fileName) :
-		file_path = resource_path("led.png")
+		file_path = resource_path("./led.png")
 		load = Image.open(file_path)
 		self.ledI = ImageTk.PhotoImage(load)
 
-		file_path = resource_path("text.png")
+		file_path = resource_path("./text.png")
 		load1 = Image.open(file_path)
 		self.textI = ImageTk.PhotoImage(load1)
 
-		file_path = resource_path("gauge.png")
+		file_path = resource_path("./gauge.png")
 		load2 = Image.open(file_path)
 		self.gaugeI = ImageTk.PhotoImage(load2)
 
@@ -541,6 +543,7 @@ class DCSDebugWindow:
 			print("Close Connection")
 			self.connectButtonText.set("Connect")
 			self.ser.close() 
+			self.statusBar.set("%s", "Ready")
 		else :
 			
 			print("Open Connection" + self.serialPortChoice.get() )
@@ -550,11 +553,13 @@ class DCSDebugWindow:
 				print(">" + str(self.ser) + "<")
 				if self.ser == "" :
 					print("No Serial Port")
+
 				else :
 					self.connectionIsOpen = 1
 					self.nextUpdate = time.monotonic() + 0.2
 					self.connectButtonText.set("Close")
-
+					self.runUp = 20
+					self.statusBar.set("%s", "Connected to:" + self.serialPortChoice.get())
 			
 
 	
@@ -752,17 +757,25 @@ def update() :
 			print("Update")
 			mWindow.nextUpdate = time.monotonic() + interval
 			###############################################
-			mWindow.ser.write(b'UUUU')
+			#mWindow.ser.write(b'UUUUUU')
+			packet = b'UUUU' 
 
-			for c in sorted(mWindow.dcsBiosAddressOrder) :
+			if mWindow.runUp :
+				mWindow.runUp = mWindow.runUp - 1
+			else :
+				for c in sorted(mWindow.dcsBiosAddressOrder) :
 
 
-				packet = mWindow.dcsBiosButtons[mWindow.dcsBiosAddressOrder[c]].getPacket()
-				if len(packet) > 0 :
-					mWindow.ser.write(packet)
-			
-			#send end of update
-			packet = b"\xFE\xFF\x02\x00" + np.uint8(mWindow.updateCount%256) + np.uint8(mWindow.updateCount/256)
+					packet1 = mWindow.dcsBiosButtons[mWindow.dcsBiosAddressOrder[c]].getPacket()
+					if len(packet1) > 0 :
+						#mWindow.ser.write(packet)
+						packet = packet + packet1
+				
+				#send end of update
+				#packet = packet + b"\xFE\xFF\x02\x00" + np.uint8(mWindow.updateCount%256) + np.uint8(mWindow.updateCount/256)
+				packet = packet + b"\xFE\xFF\x02\x00" + np.uint8(mWindow.updateCount%256) + b"\x00"
+
+
 			print(packet)
 			mWindow.ser.write(packet)
 
