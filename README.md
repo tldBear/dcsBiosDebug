@@ -16,7 +16,7 @@ This app is designed to just that. It's a small GUI that allows you to send inst
 
 ### Pre Built Binaries
 
-[Windows 64bit](downloads/dcsBiosDebug.exe)
+[Windows 64bit](https://github.com/tldBear/tldBear.github.io/blob/master/Downloads/dcsBiosDebug.exe)
 
 Should be fully self contained. 
  
