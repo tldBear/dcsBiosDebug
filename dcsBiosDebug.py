@@ -7,7 +7,7 @@
 #	(c)2020 DRoberts
 
 
-APP_VERSION = "V1.20 28/2/20"
+APP_VERSION = "V1.21 29/2/20"
 APP_NAME = "BearTech dcsBiosDebug"
 
 
@@ -556,9 +556,9 @@ class DCSDebugWindow:
 
 				else :
 					self.connectionIsOpen = 1
-					self.nextUpdate = time.monotonic() + 0.2
+					self.nextUpdate = time.monotonic() + 1.5
 					self.connectButtonText.set("Close")
-					self.runUp = 20
+					self.runUp = 3
 					self.statusBar.set("%s", "Connected to:" + self.serialPortChoice.get())
 			
 
@@ -736,7 +736,7 @@ def resource_path(relative_path):
 
 
 
-
+###############################################
 
 def update() :
 	
