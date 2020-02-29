@@ -22,7 +22,7 @@ Should be fully self contained.
  
 ### Python script
 
-[**Mac OSX App Bundle**](downloads/dcsBiosDebug.zip)
+[**Mac OSX App Bundle**](https://github.com/tldBear/tldBear.github.io/blob/master/Downloads/dcsBiosDebug.zip)
 
 
 
