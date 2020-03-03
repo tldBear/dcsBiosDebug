@@ -12,11 +12,19 @@ This is still a work in progress. Bugs are expected.
 Often when building/debugging dcsBios based instruments, it can be useful to be able to send to the instrument a particular update message, gauge value etc without having start DCS, start a mission, try to fly whilst debugging etc
 This app is designed to just that. It's a small GUI that allows you to send instrument state updates over a serial port to your cockpit hardware and view their responses.
 
+# Updates
+v1.3 
+Added Save/Load User settings
+Saves settings on close
+Added checking of fields
+Testing of IntegerBuffer
+Misc bugs fixed
+
 # Downloads
 
 ### Pre Built Binaries
 
-[Windows 64bit](https://github.com/tldBear/tldBear.github.io/blob/master/Downloads/dcsBiosDebug.exe)
+[**Windows 64bit**](https://github.com/tldBear/tldBear.github.io/blob/master/Downloads/dcsBiosDebug.exe)
 
 Should be fully self contained. 
  
@@ -50,8 +58,8 @@ Serial Port should then open. dcsBiosDebug will start sending updates to connect
 ![Choose Serial Port](manual/Screenshot_SerialOpen.png)
 
 By default, dcsBiosDebug will send one update per second. This can be increased by setting the value in the update/s field.
-(max 30)
-**Note** There's currently no error checking on this field. Entering something other than an integer value will cause an error in the app. You'll need to restart.
+(max 30/s)
+
 
 ## Choose JSON File
 Next, need to choose DCS Bios JSON file that defines instruments, buttons etc. These should be in the doc/json directory of DCS Bios. 
@@ -95,24 +103,18 @@ If 'Wrap' is set, in Auto mode will wrap from 65535 to zero and continue increme
 
 In the above example, the Integer will start from 0, increement to 2, then 4 ect, 12 times per second. On reaching 65535, it'll reset to 0, and then continue to 65535 a second time. it'll then start decrementing, reset to 65535 when it reaches 0, and continue until it reaches 0 again. It'll then start incrementing again.
 
-**Note** Integer Field hasn't been fully verified. Regard this part of App as alpha quality.
+
 
 # Limitations and known bugs
-Field entry value checking as noted above.
-
-Integer Field not fully verified.
 
 Save Received Data not implemented.
 
 Integer Fields only 16bit.
 
-Quit button doesn't work on Windows. Hit x or kill app.
 
 
 # Further Work
 Remove above limitations :-)
-
-Save Active Indicator to a file.
 
 Add ability to remove individual indicators.
 
