@@ -13,11 +13,16 @@ Often when building/debugging dcsBios based instruments, it can be useful to be 
 This app is designed to just that. It's a small GUI that allows you to send instrument state updates over a serial port to your cockpit hardware and view their responses.
 
 # Updates
-v1.3 
+**v1.3** 
+
 Added Save/Load User settings
+
 Saves settings on close
+
 Added checking of fields
+
 Testing of IntegerBuffer
+
 Misc bugs fixed
 
 # Downloads
@@ -93,7 +98,7 @@ Again, click to make active. Drag slider to send update value to instrument.
 
 ![Int](manual/ScreenshotInt.png)
 
-Int Fields can also send updates automatically. Click the 'Auto' button.
+Integer Fields can also send updates automatically. Click the 'Auto' button.
 ![IntAuto](manual/ScreenshotInt1.png)
 
 Integer Field will then increment at set rate slider value, '/s' times per second,  until 65535 reached, then start decrementing until zero. Then repeat.
