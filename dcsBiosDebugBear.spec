@@ -2,9 +2,7 @@
 
 block_cipher = None
 added_files = [
-         ( 'icons/led.png', '.' ),
-         ( 'icons/gauge.png', '.' ),
-         ( 'icons/text.png', '.' )
+         ( './icons/*.png', 'icons' )
          ]
 
 a = Analysis(['dcsBiosDebug.py'],

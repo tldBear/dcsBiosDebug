@@ -7,10 +7,11 @@
 #	(c)2020 DRoberts
 
 
-APP_VERSION = "V1.21 29/2/20"
+APP_VERSION = "V1.30 3/3/20"
 APP_NAME = "BearTech dcsBiosDebug"
 
-
+from os.path import expanduser
+userHome = expanduser("~")
 from tkinter import *
 import tkinter as tk 
 from tkinter import filedialog
@@ -22,6 +23,7 @@ import time
 #find serial ports
 import serial
 import json
+import re
 from PIL import Image, ImageTk
 
 print(sys.version)
@@ -217,9 +219,12 @@ class IntSlider:
 				print(self.autoValue)
 				#get update interval
 				tt = self.autoRate.get()
-				if tt == "" :
-					tt = "1"
-				noUpdates = float(tt)
+				
+				try:
+					noUpdates = float(tt)
+				except:
+					noUpdates = 1
+					print("Non-Number Argument")
 				if noUpdates > 0 and noUpdates < 31:
 					interval = 1/noUpdates
 				else :
@@ -281,11 +286,14 @@ class widgetCreator:
 		self.ButtonB.pack(side=LEFT)
 
 
+		mWindow.instrumentList['Active'][self.name] = self
+
 	def ButtonPress(self):
 		if self.type == 'led':
 			mWindow.dcsBiosButtons.append( LEDButton(self.widgetFrame, self.name, np.uint16(self.address), np.uint16(self.mask)))
 			mWindow.dcsBiosAddressOrder[self.address] = mWindow.widgetCount
 			mWindow.widgetCount = mWindow.widgetCount + 1
+
 
 		if self.type == 'analog_gauge':
 			mWindow.dcsBiosButtons.append( IntSlider(self.widgetFrame, self.name, np.uint16(self.address)))
@@ -296,6 +304,10 @@ class widgetCreator:
 			mWindow.dcsBiosButtons.append( StringDisplay(self.widgetFrame, self.name, np.uint16(self.address), self.mask))
 			mWindow.dcsBiosAddressOrder[self.address] = mWindow.widgetCount
 			mWindow.widgetCount = mWindow.widgetCount + 1
+
+		
+		mWindow.appSettings['Active'][self.name] = self.type
+
 
 #######################################
 
@@ -311,6 +323,10 @@ class DCSDebugWindow:
 	dcsBiosAddressOrder = {}
 	widgetCount = 0
 
+	appSettings = {}
+	appSettings['Active'] = {}
+	instrumentList = {}
+	instrumentList['Active'] = {}
 
 	#Create Main Window title="Bear DCSBios Debug Tool"
 	def __init__(self, master ):
@@ -429,7 +445,8 @@ class DCSDebugWindow:
 		self.intervalL = tk.Label(self.intervalF, text="Updates")
 		self.intervalL.grid(row=0, column=0)
 
-		self.intervalE = tk.Entry(self.intervalF, width=2, text="30")
+		self.noUpdates = IntVar()
+		self.intervalE = tk.Entry(self.intervalF, width=2, textvariable=self.noUpdates)
 		self.intervalE.grid(row=0, column=1)
 
 		self.intervalL = tk.Label(self.intervalF, text="/s")
@@ -443,15 +460,49 @@ class DCSDebugWindow:
 		self.clearB.bind("<Button-1>", self.clear)
 		self.clearB.pack(side=LEFT)
 
+		self.clearB = tk.Button(self.topF, text="Load Settings", width=8)
+		self.clearB.bind("<Button-1>", self.clear)
+		self.clearB.pack(side=LEFT)
+
+		self.clearB = tk.Button(self.topF, text="Save Settings", width=8)
+		self.clearB.bind("<Button-1>", self.clear)
+		self.clearB.pack(side=LEFT)
+
 		self.quitAppB = tk.Button(self.topF, text="Quit", width=8)
 		self.quitAppB.bind("<Button-1>", self.quitApp)
 		self.quitAppB.pack(side=RIGHT, anchor=E)
 
 		
 
+	def readDefaultSettingsFile(self) :
 
+		settingsFile = userHome + '/Documents/dcsBiosDebug.settings'
+
+		self.readSettingsFile(settingsFile)
+
+	def readSettingsFile(self, settingsFile) :
 		#Read Config File
-		
+		settingsTemp = {}
+		try:
+			
+			with open(settingsFile, 'r') as f :
+				settingsTemp = json.load(f)
+				f.close()
+		except:
+			print("Can't Open "+settingsFile)
+
+		if "JSONFile" in settingsTemp:
+			print(settingsTemp["JSONFile"])
+			self.readJSONData( settingsTemp["JSONFile"])
+
+			#print(mWindow.instrumentList)
+			if "Active" in settingsTemp:
+				for inst in settingsTemp['Active'].keys():
+					print(inst)
+					mWindow.instrumentList['Active'][inst].ButtonPress()
+
+			if 'noUpdates' in settingsTemp:
+				mWindow.noUpdates.set(settingsTemp['noUpdates'])
 
 		#self.dcsBiostk.Buttons.append( LEDtk.Button(self.btmF, "Waypoints", np.uint16(0x1920), np.uint16(0x0400)))
 		#self.dcsBiosAddressOrder[0x1920] = 0
@@ -468,7 +519,7 @@ class DCSDebugWindow:
 		print(openFile)
 		if openFile != "" :
 			self.readJSONData( openFile)
-			self.fileNameVariable.set(openFile)
+			
 
 	def findSerPorts(self,event) :
 		print("Poll Serial")
@@ -484,15 +535,18 @@ class DCSDebugWindow:
 			self.listB['menu'].add_command(label=choice, command=tk._setit(self.serialPortChoice, choice))
 
 	def readJSONData(self, fileName) :
-		file_path = resource_path("./led.png")
+		self.fileNameVariable.set(fileName)
+		self.appSettings["JSONFile"] =fileName
+
+		file_path = resource_path("./icons/led.png")
 		load = Image.open(file_path)
 		self.ledI = ImageTk.PhotoImage(load)
 
-		file_path = resource_path("./text.png")
+		file_path = resource_path("./icons/text.png")
 		load1 = Image.open(file_path)
 		self.textI = ImageTk.PhotoImage(load1)
 
-		file_path = resource_path("./gauge.png")
+		file_path = resource_path("./icons/gauge.png")
 		load2 = Image.open(file_path)
 		self.gaugeI = ImageTk.PhotoImage(load2)
 
@@ -526,7 +580,14 @@ class DCSDebugWindow:
 			f.close()
 
 	def quitApp(self, event):
-		quit()
+		#save current settings
+		settingsFile = userHome + '/Documents/dcsBiosDebug.settings'
+		with open(settingsFile, 'w') as f :
+			json.dump(self.appSettings, f)
+			f.close()
+		root.quit()
+	#	self.clear("<Button-1>")
+	#	root.destroy()
 
 	def clear(self, event):
 		for wid in mWindow.dcsBiosButtons:
@@ -546,21 +607,27 @@ class DCSDebugWindow:
 			self.statusBar.set("%s", "Ready")
 		else :
 			
-			print("Open Connection" + self.serialPortChoice.get() )
+			print("Try to Open Connection on " + self.serialPortChoice.get() )
 			
 			if self.serialPortChoice.get() != "-" :
-				self.ser = serial.Serial(self.serialPortChoice.get(), 250000, timeout=0, rtscts=0)  # open serial port
+				try:
+					self.ser = serial.Serial(self.serialPortChoice.get(), 250000, timeout=0, rtscts=0)  # open serial port
+				except:
+					self.ser = ""
 				print(">" + str(self.ser) + "<")
 				if self.ser == "" :
-					print("No Serial Port")
+					print("Failed")
+					print("No Serial Port Found/Accessible: Try another")
 
 				else :
+					print("Successful")
 					self.connectionIsOpen = 1
 					self.nextUpdate = time.monotonic() + 1.5
 					self.connectButtonText.set("Close")
 					self.runUp = 3
 					self.statusBar.set("%s", "Connected to:" + self.serialPortChoice.get())
-			
+			else :
+				print("Select a Serial Port")
 
 	
 	
@@ -714,7 +781,7 @@ def serial_ports():
 
 	result = []
 	for port in ports:
-		print(port)
+		#print(port)
 		try:
 			s = serial.Serial(port)
 			s.close()
@@ -741,16 +808,21 @@ def resource_path(relative_path):
 def update() :
 	
 
-	tt = mWindow.intervalE.get()
-	if tt == "" :
-		tt = "1"
-	noUpdates = int( float(tt))
+	tt = mWindow.noUpdates.get()
+
+	try:
+		noUpdates = int( float(tt))
+	except:
+		noUpdates = 1
+
 	if noUpdates > 0 and noUpdates < 31:
 		interval = 1/noUpdates
 	else :
 		interval = 1/30
 
-	#print(interval)
+	mWindow.appSettings['noUpdates'] = noUpdates
+
+	print(interval)
 
 	if mWindow.connectionIsOpen :
 		if time.monotonic() > mWindow.nextUpdate :
@@ -806,6 +878,7 @@ def update() :
 
 root = tk.Tk()
 mWindow = DCSDebugWindow(root) 
+mWindow.readDefaultSettingsFile()
 #mWindow.readJSONData()
 
 update()
@@ -815,5 +888,5 @@ root.mainloop()
 print("Exiting")
 #save config
 
-quit()
+#quit()
 
