@@ -12,6 +12,7 @@ APP_NAME = "BearTech dcsBiosDebug"
 
 from os.path import expanduser
 userHome = expanduser("~")
+
 from tkinter import *
 import tkinter as tk 
 from tkinter import filedialog
@@ -49,7 +50,7 @@ class StringDisplay:
 	def __init__(self, frame, name, address, mask):
 
 		self.f = tk.LabelFrame(frame, text=name)
-		self.f.grid( row = int( mWindow.widgetCount/2), column = int(mWindow.widgetCount % 2) )
+		self.f.grid( row = 1 + int( mWindow.widgetCount/2), column = int(mWindow.widgetCount % 2) )
 
 		self.myText = StringVar()
 		self.currentText = ""
@@ -102,7 +103,7 @@ class LEDButton:
 	def __init__(self, frame, name, address, mask):
 
 		self.ButtonB = tk.Button(frame, text=name, command=self.ButtonPress, highlightbackground="white", width=20)
-		self.ButtonB.grid( row = int( mWindow.widgetCount/2), column = int(mWindow.widgetCount % 2) )
+		self.ButtonB.grid( row = 1 + int( mWindow.widgetCount/2), column = int(mWindow.widgetCount % 2) )
 
 		self.address = address
 		self.mask = mask
@@ -147,11 +148,11 @@ class IntSlider:
 
 		
 		self.address = address
-		self.value = IntVar()
+		self.value = StringVar()
 		self.changed = 0
 
 		self.f = tk.LabelFrame(frame, text=name, width=30)
-		self.f.grid( row = int( mWindow.widgetCount/2), column = int(mWindow.widgetCount % 2) )
+		self.f.grid( row = 1 + int( mWindow.widgetCount/2), column = int(mWindow.widgetCount % 2) )
 
 		self.autoUpdate = IntVar()
 		self.cb = tk.Checkbutton(self.f, variable=self.autoUpdate, text="Auto")
@@ -172,7 +173,7 @@ class IntSlider:
 		self.intS = tk.Scale(self.f, command=self.sliderMove, from_ = 0, to = 65535, orient=HORIZONTAL, variable=self.value, width=10, length=200)
 		self.intS.grid(row=0, column=0, columnspan=5, sticky=W+E)
 
-		self.autoValue = np.uint16(0)
+		self.autoValue = np.int32(0)	#so can handle overflow	
 		self.nextUpdate = time.monotonic()
 		self.dir = 1
 		self.autoCount = 2
@@ -191,22 +192,31 @@ class IntSlider:
 		packet = ""
 		if self.autoUpdate.get() :
 			if time.monotonic() > self.nextUpdate :
-				a = np.uint16(self.value)*np.uint16(self.dir)
-				self.autoValue = self.autoValue + a
+				print(self.value)
+				#a = np.uint16(self.value)*np.uint16(self.dir)
+				self.autoValue = self.autoValue + self.value* self.dir
 				
 				#check for wrapping condition
 				if self.autoWrap.get() :
 					if self.autoValue > 65535 :
-						self.autoValue = self.autoValue - 65536
-						self.autoCount=self.autoCount-1
+						if self.autoCount == 0:
+							self.autoValue = 65535
+							self.autoCount = 2
+							self.dir = self.dir * -1
+						else :
+							self.autoValue = self.autoValue - 65536
+							self.autoCount=self.autoCount-1
 
 					if self.autoValue < 0 :
-						self.autoValue = self.autoValue + 65536
-						self.autoCount=self.autoCount-1
+						if self.autoCount == 0:
+							self.autoValue = 0
+							self.autoCount = 2
+							self.dir = self.dir * -1
+						else :
+							self.autoValue = self.autoValue + 65536
+							self.autoCount=self.autoCount-1
 
-					if self.autoCount == 0:
-						self.autoCount = 2
-						self.dir = self.dir * -1
+					
 				else :
 					if self.autoValue > 65535 :
 						self.autoValue = 65535
@@ -216,7 +226,9 @@ class IntSlider:
 						self.autoValue =  0
 						self.dir = self.dir * -1
 
+				tempAutoValue = np.uint16(self.autoValue)
 				print(self.autoValue)
+				print(tempAutoValue)
 				#get update interval
 				tt = self.autoRate.get()
 				
@@ -224,14 +236,14 @@ class IntSlider:
 					noUpdates = float(tt)
 				except:
 					noUpdates = 1
-					print("Non-Number Argument")
+					#print("Non-Number Argument")
 				if noUpdates > 0 and noUpdates < 31:
 					interval = 1/noUpdates
 				else :
 					interval = 1
 
 				self.nextUpdate = time.monotonic() + interval
-				packet =  b"" + np.uint8(self.address%256) + np.uint8(self.address/256) + b"\x02\x00" + np.uint8(self.autoValue % 256) + np.uint8(self.autoValue / 256)
+				packet =  b"" + np.uint8(self.address%256) + np.uint8(self.address/256) + b"\x02\x00" + np.uint8(tempAutoValue % 256) + np.uint8(tempAutoValue / 256)
 				#print(packet)
 		else :
 			self.autoValue = self.value
@@ -456,17 +468,20 @@ class DCSDebugWindow:
 		self.saveRecvDataC = tk.Checkbutton(self.topF,text="Save Recv Data", variable=self.saveRecvData)
 		self.saveRecvDataC.pack(side=LEFT)
 
-		self.clearB = tk.Button(self.topF, text="Clear", width=8)
+		self.btmCFrame = tk.Frame(self.btmF, width = 50)
+		self.btmCFrame.grid(row=0, column=0, columnspan=2, sticky=NW)
+
+		self.clearB = tk.Button(self.btmCFrame, text="Clear", width=8)
 		self.clearB.bind("<Button-1>", self.clear)
 		self.clearB.pack(side=LEFT)
 
-		self.clearB = tk.Button(self.topF, text="Load Settings", width=8)
-		self.clearB.bind("<Button-1>", self.clear)
-		self.clearB.pack(side=LEFT)
+		self.loadB = tk.Button(self.btmCFrame, text="Load", width=8)
+		self.loadB.bind("<Button-1>", self.loadUserSettings)
+		self.loadB.pack(side=RIGHT, anchor=E)
 
-		self.clearB = tk.Button(self.topF, text="Save Settings", width=8)
-		self.clearB.bind("<Button-1>", self.clear)
-		self.clearB.pack(side=LEFT)
+		self.saveB = tk.Button(self.btmCFrame, text="Save", width=8)
+		self.saveB.bind("<Button-1>", self.saveUserSettings)
+		self.saveB.pack(side=RIGHT, anchor=E)
 
 		self.quitAppB = tk.Button(self.topF, text="Quit", width=8)
 		self.quitAppB.bind("<Button-1>", self.quitApp)
@@ -474,9 +489,27 @@ class DCSDebugWindow:
 
 		
 
+	def loadUserSettings(self, event):
+		print("Load")	
+		openFile =  filedialog.askopenfilename(title = "Select file",filetypes = (("settings files","*.json"),("all files","*.*")))
+		print(openFile)
+		if openFile != "" :
+			self.readSettingsFile(openFile) 
+
+	def saveUserSettings(self, event):
+		print("Save")
+		files = [('All Files', '*.*'),  
+             ('Settings Files', '*.json')] 
+    
+
+		openFile =  filedialog.asksaveasfilename( defaultextension = 'json')
+		with open(openFile, 'w') as f :
+			json.dump(self.appSettings, f)
+			f.close()
+
 	def readDefaultSettingsFile(self) :
 
-		settingsFile = userHome + '/Documents/dcsBiosDebug.settings'
+		settingsFile = userHome + '/Documents/dcsBiosDebugSettings.json'
 
 		self.readSettingsFile(settingsFile)
 
@@ -581,13 +614,14 @@ class DCSDebugWindow:
 
 	def quitApp(self, event):
 		#save current settings
-		settingsFile = userHome + '/Documents/dcsBiosDebug.settings'
+		settingsFile = userHome + '/Documents/dcsBiosDebugSettings.json'
 		with open(settingsFile, 'w') as f :
 			json.dump(self.appSettings, f)
 			f.close()
 		root.quit()
 	#	self.clear("<Button-1>")
 	#	root.destroy()
+
 
 	def clear(self, event):
 		for wid in mWindow.dcsBiosButtons:
@@ -807,13 +841,14 @@ def resource_path(relative_path):
 
 def update() :
 	
-
-	tt = mWindow.noUpdates.get()
-
 	try:
-		noUpdates = int( float(tt))
+		noUpdates = mWindow.noUpdates.get()
 	except:
 		noUpdates = 1
+
+
+
+	mWindow.noUpdates.set(noUpdates)
 
 	if noUpdates > 0 and noUpdates < 31:
 		interval = 1/noUpdates
@@ -822,14 +857,13 @@ def update() :
 
 	mWindow.appSettings['noUpdates'] = noUpdates
 
-	print(interval)
+	#print(interval)
 
 	if mWindow.connectionIsOpen :
 		if time.monotonic() > mWindow.nextUpdate :
 			print("Update")
 			mWindow.nextUpdate = time.monotonic() + interval
 			###############################################
-			#mWindow.ser.write(b'UUUUUU')
 			packet = b'UUUU' 
 
 			if mWindow.runUp :
