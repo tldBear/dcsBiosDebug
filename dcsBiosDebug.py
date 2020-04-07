@@ -7,7 +7,7 @@
 #	(c)2020 DRoberts
 
 
-APP_VERSION = "V1.30 3/3/20"
+APP_VERSION = "V1.32 6/5/20"
 APP_NAME = "BearTech dcsBiosDebug"
 
 from os.path import expanduser
@@ -79,13 +79,14 @@ class StringDisplay:
 		self.count = 0
 		self.updateAddr = self.address
 
+
 	def getPacket(self) :
 		packet = ""
 		if self.changed :
 			toSend = (self.address + self.max_length) - self.updateAddr
 			if toSend > 4 :
 				toSend = 4;
-			if toSend > 1:
+			if toSend >= 1:
 				v = self.currentText[self.count:self.count + toSend]
 				l = b"" + np.uint8(toSend%256) + np.uint8(toSend/256)
 				packet =  b"" + np.uint8(self.updateAddr%256) + np.uint8(self.updateAddr/256) + l + v
@@ -93,6 +94,7 @@ class StringDisplay:
 				self.updateAddr = self.updateAddr + toSend
 				if self.updateAddr >= self.address + self.max_length :
 					self.changed = 0
+
 				print(packet)
 		return packet
 
@@ -117,26 +119,39 @@ class LEDButton:
 
 	def ButtonPress(self) :
 		print("LED Button")
+		print(mWindow.dcsBiosValues[self.address])
 		if self.state :
 			self.state = 0
 			self.ButtonB.configure(highlightbackground="white")
 			self.ButtonB.configure(background="white")
 			self.changed = 1
+			mWindow.dcsBiosValues[self.address] = mWindow.dcsBiosValues[self.address] & ~self.mask
 		else :
 			self.state = 1
 			self.ButtonB.configure(highlightbackground="green")
 			self.ButtonB.configure(background="green")
 			self.changed = 1
+			mWindow.dcsBiosValues[self.address] = mWindow.dcsBiosValues[self.address] | self.mask
+		print(mWindow.dcsBiosValues[self.address])
+		mWindow.dcsBiosUpdate[self.address] = 1
+		#apply mask
+		
 
 	def getPacket(self) :
 		packet = ""
-		if self.changed :
-			if self.state :
-				v = b"" + np.uint8(self.mask % 256) + np.uint8(self.mask / 256)
-			else :
-				v = b"\x00\x00"
+		#if self.changed :
+		if mWindow.dcsBiosUpdate[self.address] :
+			#if self.state :
+			#	v = b"" + np.uint8(self.mask % 256) + np.uint8(self.mask / 256)
+			#else :
+			#	v = b"\x00\x00"
+			v = b"" + np.uint8(mWindow.dcsBiosValues[self.address] % 256) + np.uint8(mWindow.dcsBiosValues[self.address] / 256)
+			print(v)
 			packet =  b"" + np.uint8(self.address%256) + np.uint8(self.address/256) + b"\x02\x00" + v
 			self.changed = 0
+			mWindow.dcsBiosUpdate[self.address] = 0
+
+
 		return packet
 
 
@@ -250,6 +265,7 @@ class IntSlider:
 			if self.changed :
 				packet =  b"" + np.uint8(self.address%256) + np.uint8(self.address/256) + b"\x02\x00" + np.uint8(self.value % 256) + np.uint8(self.value / 256)
 				self.changed = 0
+
 		return packet
 
 ###### End IntSlider
@@ -303,18 +319,24 @@ class widgetCreator:
 	def ButtonPress(self):
 		if self.type == 'led':
 			mWindow.dcsBiosButtons.append( LEDButton(self.widgetFrame, self.name, np.uint16(self.address), np.uint16(self.mask)))
-			mWindow.dcsBiosAddressOrder[self.address] = mWindow.widgetCount
+			mWindow.dcsBiosAddressOrder[self.address + self.mask/65536] = mWindow.widgetCount
+			mWindow.dcsBiosValues[self.address] = 0
+			mWindow.dcsBiosUpdate[self.address] = 0
 			mWindow.widgetCount = mWindow.widgetCount + 1
 
 
 		if self.type == 'analog_gauge':
 			mWindow.dcsBiosButtons.append( IntSlider(self.widgetFrame, self.name, np.uint16(self.address)))
-			mWindow.dcsBiosAddressOrder[self.address] = mWindow.widgetCount
+			mWindow.dcsBiosAddressOrder[self.address + self.mask/65536] = mWindow.widgetCount
+			mWindow.dcsBiosValues[self.address] = 0
+			mWindow.dcsBiosUpdate[self.address] = 0
 			mWindow.widgetCount = mWindow.widgetCount + 1
 
 		if self.type == 'display':
 			mWindow.dcsBiosButtons.append( StringDisplay(self.widgetFrame, self.name, np.uint16(self.address), self.mask))
-			mWindow.dcsBiosAddressOrder[self.address] = mWindow.widgetCount
+			mWindow.dcsBiosAddressOrder[self.address + self.mask/65536] = mWindow.widgetCount
+			mWindow.dcsBiosValues[self.address] = 0
+			mWindow.dcsBiosUpdate[self.address] = 0
 			mWindow.widgetCount = mWindow.widgetCount + 1
 
 		
@@ -333,6 +355,8 @@ class DCSDebugWindow:
 	updateCount = np.uint16(0)
 	dcsBiosButtons = []
 	dcsBiosAddressOrder = {}
+	dcsBiosValues = {}
+	dcsBiosUpdate = {}
 	widgetCount = 0
 
 	appSettings = {}
@@ -865,7 +889,8 @@ def update() :
 			mWindow.nextUpdate = time.monotonic() + interval
 			###############################################
 			packet = b'UUUU' 
-
+			packet1 = ""
+			currentIntAddress = 0
 			if mWindow.runUp :
 				mWindow.runUp = mWindow.runUp - 1
 			else :
@@ -873,14 +898,15 @@ def update() :
 
 
 					packet1 = mWindow.dcsBiosButtons[mWindow.dcsBiosAddressOrder[c]].getPacket()
+
 					if len(packet1) > 0 :
-						#mWindow.ser.write(packet)
 						packet = packet + packet1
-				
+
 				#send end of update
 				#packet = packet + b"\xFE\xFF\x02\x00" + np.uint8(mWindow.updateCount%256) + np.uint8(mWindow.updateCount/256)
 				packet = packet + b"\xFE\xFF\x02\x00" + np.uint8(mWindow.updateCount%256) + b"\x00"
-
+			
+			
 
 			print(packet)
 			mWindow.ser.write(packet)
