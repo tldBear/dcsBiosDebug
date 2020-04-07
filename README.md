@@ -14,6 +14,7 @@ This app is designed to just that. It's a small GUI that allows you to send inst
 
 # Updates
 **v1.31**
+
 Fixed LED behaviour
 
 **v1.3** 
