@@ -13,7 +13,7 @@ Often when building/debugging dcsBios based instruments, it can be useful to be 
 This app is designed to just that. It's a small GUI that allows you to send instrument state updates over a serial port to your cockpit hardware and view their responses.
 
 # Updates
-**v1.31**
+**v1.32**
 
 Fixed LED behaviour
 
