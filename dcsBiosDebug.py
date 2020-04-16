@@ -7,7 +7,9 @@
 #	(c)2020 DRoberts
 
 
+
 APP_VERSION = "V1.3.3 16/5/20"
+
 APP_NAME = "BearTech dcsBiosDebug"
 
 from os.path import expanduser
