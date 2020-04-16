@@ -7,7 +7,7 @@
 #	(c)2020 DRoberts
 
 
-APP_VERSION = "V1.32 6/5/20"
+APP_VERSION = "V1.3.3 16/5/20"
 APP_NAME = "BearTech dcsBiosDebug"
 
 from os.path import expanduser
@@ -85,9 +85,14 @@ class StringDisplay:
 		if self.changed :
 			toSend = (self.address + self.max_length) - self.updateAddr
 			if toSend > 4 :
-				toSend = 4;
+				toSend = 4
+			if toSend == 1 :
+				toSend = 2 		#always pad to 2 bytes
 			if toSend >= 1:
-				v = self.currentText[self.count:self.count + toSend]
+				v = self.currentText[self.count:self.count + toSend] 
+				#+ b" "
+				
+
 				l = b"" + np.uint8(toSend%256) + np.uint8(toSend/256)
 				packet =  b"" + np.uint8(self.updateAddr%256) + np.uint8(self.updateAddr/256) + l + v
 				self.count = self.count + toSend
@@ -95,7 +100,11 @@ class StringDisplay:
 				if self.updateAddr >= self.address + self.max_length :
 					self.changed = 0
 
-				print(packet)
+				
+
+			
+		print(len(packet))
+		print(packet)
 		return packet
 
 
