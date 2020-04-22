@@ -8,7 +8,7 @@
 
 
 
-APP_VERSION = "V1.3.3 16/5/20"
+APP_VERSION = "V1.3.4 22/4/20"
 
 APP_NAME = "BearTech dcsBiosDebug"
 
@@ -922,15 +922,15 @@ def update() :
 			print(packet)
 			mWindow.ser.write(packet)
 
-			q = mWindow.recvTextVariable.get() 
-			s = ""
-			for sTemp in q.splitlines()[-39:60] :
-				s = s + sTemp + "\n"
+		q = mWindow.recvTextVariable.get() 
+		s = ""
+		for sTemp in q.splitlines()[-39:60] :
+			s = s + sTemp + "\n"
 
-			packet = mWindow.ser.read(30)
-			s = s + str(packet) + "\n"
+		packet = mWindow.ser.read(30)
+		s = s + str(packet) + "\n"
 
-			mWindow.recvTextVariable.set(s)
+		mWindow.recvTextVariable.set(s)
 
 
 
