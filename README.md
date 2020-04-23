@@ -118,7 +118,7 @@ If 'Wrap' is set, in Auto mode will wrap from 65535 to zero and continue increme
 
 ![IntAutoWrap](manual/ScreenshotInt2.png)
 
-In the above example, the Integer will start from 0, increement to 2, then 4 ect, 12 times per second. On reaching 65535, it'll reset to 0, and then continue to 65535 a second time. it'll then start decrementing, reset to 65535 when it reaches 0, and continue until it reaches 0 again. It'll then start incrementing again.
+In the above example, the Integer will start from 0, increment to 2, then 4 ect, 12 times per second. On reaching 65535, it'll reset to 0, and then continue to 65535 a second time. it'll then start decrementing, reset to 65535 when it reaches 0, and continue until it reaches 0 again. It'll then start incrementing again.
 
 
 
