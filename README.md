@@ -39,7 +39,7 @@ Misc bugs fixed
 
 # Downloads
 
-v1.3.3
+v1.3.4
 
 ### Pre Built Binaries
 
