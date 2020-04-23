@@ -13,6 +13,10 @@ Often when building/debugging dcsBios based instruments, it can be useful to be 
 This app is designed to just that. It's a small GUI that allows you to send instrument state updates over a serial port to your cockpit hardware and view their responses.
 
 # Updates
+**v1.3.4**
+
+Improved recv text
+
 **v1.3.3**
 
 Fixed single byte text field
@@ -39,16 +43,16 @@ v1.3.3
 
 ### Pre Built Binaries
 
-[**Windows 64bit (1.3.2)**](https://github.com/tldBear/tldBear.github.io/blob/master/Downloads/dcsBiosDebug.exe)
+[**Windows 64bit**](https://github.com/tldBear/dcsBiosDebug/releases/download/v1.3.4/Win64-dcsBiosDebug.exe)
 
 Should be fully self contained. 
  
 ### Python script
 
-[**Mac OSX App Bundle**](https://github.com/tldBear/dcsBiosDebug/releases/download/v1.3.3/MacOSX_dcsBiosDebug.app.zip)
+[**Mac OSX App Bundle**](https://github.com/tldBear/dcsBiosDebug/releases/download/v1.3.4/MacOSX-dcsBiosDebug.app.zip)
 
 
-[**Source**](https://github.com/tldBear/dcsBiosDebug/releases/tag/v1.3.3)
+[**Source**](https://github.com/tldBear/dcsBiosDebug/releases/tag/v1.3.4)
 
 **Note** These are not fully self contained. Python3, as well as some dependancies (eg tkinter, pyserial & numpy) will need to be installed separately.
 
