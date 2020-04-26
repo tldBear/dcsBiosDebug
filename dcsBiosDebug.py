@@ -8,7 +8,7 @@
 
 
 
-APP_VERSION = "V1.3.4 22/4/20"
+APP_VERSION = "V1.4.0 25/4/20"
 
 APP_NAME = "BearTech dcsBiosDebug"
 
@@ -617,6 +617,16 @@ class DCSDebugWindow:
 		file_path = resource_path("./icons/gauge.png")
 		load2 = Image.open(file_path)
 		self.gaugeI = ImageTk.PhotoImage(load2)
+
+
+		#create config text field
+		catF = catCreator(self.scrollable_frame, "Debug")
+
+		con = "Config Interface"
+		controlType = 'display'
+		address = 0xF100
+		max_length = 20
+		widgetCreator(catF.ff ,self.btmF, controlType, con, address, max_length, self.textI )
 
 		#Read json file
 
