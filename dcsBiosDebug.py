@@ -8,7 +8,7 @@
 
 
 
-APP_VERSION = "V1.4.0 25/4/20"
+APP_VERSION = "V1.4.1 27/6/20"
 
 APP_NAME = "BearTech dcsBiosDebug"
 
@@ -28,6 +28,7 @@ import serial
 import json
 import re
 from PIL import Image, ImageTk
+
 
 print(sys.version)
 
@@ -374,6 +375,8 @@ class DCSDebugWindow:
 	appSettings['Active'] = {}
 	instrumentList = {}
 	instrumentList['Active'] = {}
+
+	tick = 0;
 
 	#Create Main Window title="Bear DCSBios Debug Tool"
 	def __init__(self, master ):
@@ -884,8 +887,10 @@ def resource_path(relative_path):
 
 ###############################################
 
+
 def update() :
 	
+
 	try:
 		noUpdates = mWindow.noUpdates.get()
 	except:
@@ -935,11 +940,25 @@ def update() :
 		q = mWindow.recvTextVariable.get() 
 		s = ""
 		for sTemp in q.splitlines()[-39:60] :
-			s = s + sTemp + "\n"
+			if len(sTemp) > 3:
+				s = s + sTemp + "\n"
 
 		packet = mWindow.ser.read(30)
-		s = s + str(packet) + "\n"
+		
 
+		if mWindow.tick <50 :
+			cursor = " "
+		else :
+			cursor = "_"
+
+		if len(str(packet)) > 3:
+			s = s + "\n" + str(packet)
+		else :
+			s = s + cursor 
+
+		mWindow.tick = mWindow.tick + 1
+		if mWindow.tick > 100 :
+			mWindow.tick = 0
 		mWindow.recvTextVariable.set(s)
 
 
