@@ -4,11 +4,11 @@
 #
 #
 #
-#	(c)2020 DRoberts
+#	(c)2026 DRoberts
 
 
 
-APP_VERSION = "V1.4.1 27/6/20"
+APP_VERSION = "V1.5.0 4/4/26"
 
 APP_NAME = "BearTech dcsBiosDebug"
 
