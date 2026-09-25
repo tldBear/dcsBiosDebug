@@ -134,7 +134,7 @@ class Arc210Controls:
             command=self.sendArc210Master
         )
         self.arc210SetMasterB.grid(row=4, column=3)
-        
+
 
     def _sendDirectWord(self, address, word, label):
         if not self.connectionIsOpen:
@@ -272,4 +272,3 @@ class Arc210Controls:
             self.statusBar.set(
                 "%s", "ARC-210 master " + self.arc210MasterMode.get()
             )
-
