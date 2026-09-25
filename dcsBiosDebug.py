@@ -27,6 +27,7 @@ import time
 import serial
 import json
 import re
+from arc210_controls import Arc210Controls
 from PIL import Image, ImageTk
 
 
@@ -357,7 +358,7 @@ class widgetCreator:
 
 #######################################
 
-class DCSDebugWindow:
+class DCSDebugWindow(Arc210Controls):
 	
 	connectionIsOpen = 0 
 	serPorts = []
@@ -488,6 +489,9 @@ class DCSDebugWindow:
 		self.connectB = tk.Button(self.topF, textvariable=self.connectButtonText)
 		self.connectB.bind("<Button-1>", self.toggleConnection)
 		self.connectB.pack(side=LEFT)
+
+		if "--arc210" in sys.argv:
+			self.buildArc210Controls()
 		
 		self.intervalF = Frame(self.topF)
 		self.intervalF.pack(side=LEFT)
