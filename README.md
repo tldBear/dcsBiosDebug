@@ -142,3 +142,37 @@ Add ability to remove individual indicators.
 
 **Suggestions for improvement and bug reports are welcome**
 
+
+
+## Optional ARC-210 bench controls
+
+Start the Python app with `python dcsBiosDebug.py --arc210` to show an additional
+A-10C II ARC-210 panel beside the serial controls. Without this flag, the normal
+interface is unchanged. Connect to your hardware using the existing serial controls.
+
+The panel provides MENU, XMT/RCV, upper/middle/lower left soft keys, and separate
+Set Frequency, Set Secondary, and Set Master controls. Master includes OFF and TR.
+Frequency accepts 30.000–399.975 MHz. Each momentary button sends a press followed
+by a release after 75 ms. Changing Master preserves Secondary and the other fields
+sharing its word; changing Secondary preserves Master. Setting frequency does not
+turn on the radio or change either switch.
+
+These controls send simulated DCS-BIOS output packets directly to the connected
+hardware. They do not operate the radio in a running DCS session. They use a fixed
+A-10C II export layout, independently of the JSON selected in the main app:
+
+| Control | Address | Mask / length |
+| --- | --- | --- |
+| Master | 0x1322 | 0x1C00, shift 10 |
+| Secondary | 0x1322 | 0xE000, shift 13 |
+| Frequency | 0x1382 | 7 characters |
+| MENU / XMT/RCV | 0x1334 | 0x1000 / 0x0400 |
+| Upper / middle / lower soft key | 0x1366 | 0x0400 / 0x0800 / 0x1000 |
+
+Check these against your installed DCS-BIOS aircraft JSON before use. Do not enable
+this panel for another aircraft or address layout. Existing automatic updates for
+the same controls can overwrite bench settings; disable those while testing.
+Firmware that requires additional power/status exports may need those supplied
+through the normal controls as well. No new dependencies are required.
+
+Protocol tests can be run with `python -m unittest discover -s tests`.
